@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import HomePage from "./pages/HomePage";
+import Navbar from "./components/Navbar";
+import PrivateRoute from "./components/PrivateRoute";
 
-function App() {
+const App = () => {
+  const [currentUser, setCurrentUser] = useState(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <BrowserRouter>
+        <Navbar setCurrentUser={setCurrentUser} currentUser={currentUser} />
+        <main className="container mx-auto w-[90%]">
+          <Routes>
+            <Route
+              path="/"
+              element={<HomePage setCurrentUser={setCurrentUser} />}
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute currentUser={currentUser}>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </main>
+      </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;
